@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Games - Portal Futurista</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #05050f;
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff003c;
+            --accent-purple: #b026ff;
+            --glass-bg: rgba(10, 10, 25, 0.7);
+            --glass-border: rgba(0, 240, 255, 0.3);
+            --text-main: #e0e0ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(176, 38, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Cybernetic Grid Background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
+
+        header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px var(--primary-neon),
+                0 0 40px var(--primary-neon);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .upload-btn {
+            background: transparent;
+            color: var(--primary-neon);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary-neon);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.4), transparent);
+            transition: all 0.4s ease;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-neon);
+            color: var(--bg-color);
+            box-shadow: 0 0 20px var(--primary-neon);
+        }
+
+        .upload-btn:hover::before {
+            left: 100%;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .category-tag {
+            background: rgba(176, 38, 255, 0.1);
+            border: 1px solid var(--accent-purple);
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-tag:hover, .category-tag.active {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        /* Friv-like Grid but Futuristic */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .game-card {
+            aspect-ratio: 1;
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon), var(--accent-purple)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: scale(1.15) translateY(-10px);
+            z-index: 10;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.8),
+                0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(30%) contrast(120%);
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover .game-image {
+            filter: grayscale(0%) contrast(100%);
+        }
+
+        .game-info {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 1px solid var(--primary-neon);
+        }
+
+        .game-card:hover .game-info {
+            bottom: 0;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* Upload Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: rgba(10, 10, 20, 0.95);
+            border: 2px solid var(--primary-neon);
+            border-radius: 15px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.2);
+            position: relative;
+            transform: translateY(50px);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: var(--secondary-neon);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: text-shadow 0.3s ease;
+        }
+
+        .close-btn:hover {
+            text-shadow: 0 0 10px var(--secondary-neon);
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary-neon);
+            margin-bottom: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #aaa;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            color: #fff;
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(176, 38, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-neon);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-neon);
+            margin-bottom: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, var(--accent-purple), var(--primary-neon));
+            border: none;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            filter: brightness(1.2);
+        }
+
+        /* Glitch Effect for Title */
+        .glitch {
+            position: relative;
+        }
+        
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-bg);
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary-neon);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--primary-neon);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 1rem;
+            }
+            .logo { font-size: 1.5rem; }
+            .upload-btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+
+    <header>
+        <div class="logo glitch" data-text="NEXUS">NEXUS</div>
+        <button class="upload-btn" id="openUploadModal">
+            [ Subir Juego ]
+        </button>
+    </header>
+
+    <main>
+        <div class="categories">
+            <button class="category-tag active">Todos</button>
+            <button class="category-tag">Acción</button>
+            <button class="category-tag">Carreras</button>
+            <button class="category-tag">Cyber-RPG</button>
+            <button class="category-tag">Puzzles Lógicos</button>
+            <button class="category-tag">Arcade</button>
+            <button class="category-tag">Multijugador</button>
+        </div>
+
+        <div class="games-grid" id="gamesContainer">
+            <!-- Los juegos se generarán con JavaScript para la demostración -->
+        </div>
+    </main>
+
+    <!-- Modal para subir juego -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal-content">
+            <div class="close-btn" id="closeModal">&times;</div>
+            <h2 class="modal-title">Inicializar Carga</h2>
+            
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>Nombre del Enlace / Título</label>
+                    <input type="text" class="form-control" placeholder="Ej: CyberDrift 2077" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Categoría Principal</label>
+                    <select class="form-control">
+                        <option>Acción</option>
+                        <option>Carreras</option>
+                        <option>Arcade</option>
+                        <option>RPG</option>
+                    </select>
+                </div>
+
+                <div class="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <h3>Arrastra los archivos del juego aquí</h3>
+                    <p style="color: #666; margin-top: 10px;">o haz clic para explorar (.zip, .rar, .html)</p>
+                </div>
+
+                <button type="button" class="submit-btn" onclick="alert('Iniciando secuencia de subida... Simulada con éxito.')">Transmitir al Servidor</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Generar juegos de demostración
+        const gamesContainer = document.getElementById('gamesContainer');
+        const colors = ['#00f0ff', '#ff003c', '#b026ff', '#00ff66', '#ffff00'];
+        
+        for (let i = 1; i <= 60; i++) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            
+            // Generar colores y patrones aleatorios para simular carátulas de juegos
+            const color1 = colors[Math.floor(Math.random() * colors.length)];
+            const color2 = colors[Math.floor(Math.random() * colors.length)];
+            const degrees = Math.floor(Math.random() * 360);
+            
+            card.innerHTML = `
+                <div style="width: 100%; height: 100%; background: linear-gradient(${degrees}deg, ${color1}20, ${color2}80); display: flex; align-items: center; justify-content: center;">
+                    <span style="font-family: 'Orbitron'; font-size: 2rem; color: rgba(255,255,255,0.5);">${i}</span>
+                </div>
+                <div class="game-info">
+                    <div class="game-title">Protocolo ${i}</div>
+                </div>
+            `;
+            
+            // Añadir efecto de sonido al pasar el ratón (simulado)
+            card.addEventListener('mouseenter', () => {
+                // En un caso real aquí se reproduciría un sonido corto estilo "bloop" o electrónico
+                card.style.boxShadow = `0 15px 30px rgba(0, 0, 0, 0.8), 0 0 20px ${color1}aa`;
+            });
+            
+            gamesContainer.appendChild(card);
+        }
+
+        // Lógica del Modal
+        const modal = document.getElementById('uploadModal');
+        const openBtn = document.getElementById('openUploadModal');
+        const closeBtn = document.getElementById('closeModal');
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
