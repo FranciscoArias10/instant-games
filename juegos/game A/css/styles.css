@@ -1,0 +1,181 @@
+:root {
+  /* Fondos */
+  --bg-dark: #0B0F19;
+  --bg-panel: #161D2B;
+
+  /* Colores Neón */
+  --neon-cyan: #00E5FF;
+  --neon-purple: #B026FF;
+  --neon-red: #FF0044;
+  --neon-green: #00FA65;
+}
+
+/* ------------------------------------------------- */
+/* FUENTES PERSONALIZADAS                            */
+/* ------------------------------------------------- */
+@font-face {
+  font-family: 'RelojDigital';
+  src: url('../fonts/digital-7.ttf') format('truetype'); 
+}
+
+/* ------------------------------------------------- */
+/* ------------------------------------------------- */
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 1.6rem;
+}
+
+/* Ejemplo de clase reutilizable para botones o elementos del juego */
+.elemento-neon-cian {
+  background-color: transparent;
+  color: var(--neon-cyan);
+  border: 0.2rem solid var(--neon-cyan);
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  
+  /* Aquí ocurre la magia del resplandor */
+  box-shadow: 0 0 1rem var(--neon-cyan), inset 0 0 0.5rem var(--neon-cyan);
+  text-shadow: 0 0 0.8rem var(--neon-cyan);
+  transition: all 0.3s ease;
+}
+
+.elemento-neon-cian:hover {
+  background-color: var(--neon-cyan);
+  color: var(--bg-dark);
+  box-shadow: 0 0 2rem var(--neon-cyan), inset 0 0 1rem var(--neon-cyan);
+}
+
+/* ------------------------------------------------- */
+/* HEAD                        */
+/* ------------------------------------------------- */
+
+.contenedor{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 1.5rem 4rem; /* Da espacio interno para que las letras no toquen el borde */
+  z-index: 1; /* Asegura que el texto quede por encima del borde */
+  width: fit-content; /* Ajusta el ancho al contenido */
+  margin: 1.5rem auto 3rem auto;
+
+}
+
+/* La mitad Izquierda (Cian) */
+.contenedor::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 50%; /* Ocupa exactamente la mitad */
+  border-left: 0.2rem solid var(--neon-cyan);
+  border-top: 0.2rem solid var(--neon-cyan);
+  border-bottom: 0.2rem solid var(--neon-cyan);
+  border-right: none; /* Quitamos la pared derecha para que se una con la otra mitad */
+  border-radius: 1rem 0 0 1rem; /* Redondea solo las esquinas izquierdas */
+  /* Ajuste crucial: quitamos el inset shadow en el borde derecho (horizontalmente) */
+  box-shadow: -0.5rem 0 1rem 0rem rgba(0, 229, 255, 0.5), inset 0 0 0rem rgba(0, 229, 255, 0.5); 
+  /* Clip-path para asegurar que nada cruce el centro */
+  clip-path: inset(-2rem 0 -2rem -2rem); 
+  z-index: -1; /* Lo manda al fondo */
+}
+
+/* La mitad Derecha (Morado) */
+.contenedor::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 50%; /* Ocupa la otra mitad */
+  border-right: 0.2rem solid var(--neon-purple);
+  border-top: 0.2rem solid var(--neon-purple);
+  border-bottom: 0.2rem solid var(--neon-purple);
+  border-left: none; /* Quitamos la pared izquierda */
+  border-radius: 0 1rem 1rem 0; /* Redondea solo las esquinas derechas */
+  /* Ajuste crucial: quitamos el inset shadow en el borde izquierdo (horizontalmente) */
+  box-shadow: 0.5rem 0 1rem 0rem rgba(176, 38, 255, 0.5), inset 0 0 0rem rgba(176, 38, 255, 0.5);
+  /* Clip-path para asegurar que nada cruce el centro */
+  clip-path: inset(-2rem -2rem -2rem 0);
+  z-index: -1; /* Lo manda al fondo */
+
+}
+
+.contenedor-marcador {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.marcador-jugador1, .marcador-jugador2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: -0.5rem -1rem;
+}
+
+.marcador-jugador1 h2{
+
+  color: var(--neon-cyan);
+  text-shadow: 0 0 1rem var(--neon-cyan);
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.marcador-jugador2 h2{
+
+  color: var(--neon-purple);
+  text-shadow: 0 0 1rem var(--neon-purple);
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.numero-score {
+  font-size: 4rem;
+  font-family: 'RelojDigital', sans-serif; /* Llama a tu fuente personalizada */
+  color: #ffffff;
+  text-shadow: 0 0 1rem #ffffff; /* Un pequeño resplandor blanco para que parezca luz LED */
+  font-weight: bold;
+  margin-right: 1rem;
+  margin-left: 1rem;
+}
+
+.texto-vs{
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  justify-content: center;
+  margin-top: -0.1rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  color: white;
+  text-shadow: 0 0 1.5rem white;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.titulo-marcador{
+
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 1.5rem white;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  margin-left: -1rem;
+
+}
+
+/* ------------------------------------------------- */
+/* MAIN: LA CANCHA O MESA DE JUEGO                   */
+/* ------------------------------------------------- */
